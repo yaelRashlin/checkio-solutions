@@ -1,0 +1,46 @@
+def between_markers(text: str, begin: str, end: str) -> str:
+    import re
+    if begin and end:
+        if begin in text and end in text:
+            begin_idx = text.index(begin)
+            end_idx = text.index(end)
+            if end_idx < begin_idx:
+                return ""
+            return text[begin_idx + len(begin): end_idx]
+        elif begin in text:
+            begin_idx = text.index(begin)
+            return get_begin(text, begin)
+        elif end in text:
+            end_idx = text.index(end)
+            return get_end(text, end)
+        else:
+            return text
+    elif begin and not end:
+        return get_begin(text, begin)
+    elif end and not begin:
+        return get_end(text, end)
+    else:
+        return ""
+
+def get_end(text: str, end: str) -> str:
+    end_idx = text.index(end)
+    return text[:end_idx]
+    
+def get_begin(text: str, begin: str) -> str:
+    begin_idx = text.index(begin) + len(begin)
+    return text[begin_idx:]
+
+
+if __name__ == '__main__':
+    print('Example:')
+    print(between_markers('What is >apple<', '>', '<'))
+
+    # These "asserts" are used for self-checking and not for testing
+    assert between_markers('What is >apple<', '>', '<') == "apple", "One sym"
+    assert between_markers("<head><title>My new site</title></head>",
+                           "<title>", "</title>") == "My new site", "HTML"
+    assert between_markers('No[/b] hi', '[b]', '[/b]') == 'No', 'No opened'
+    assert between_markers('No [b]hi', '[b]', '[/b]') == 'hi', 'No close'
+    assert between_markers('No hi', '[b]', '[/b]') == 'No hi', 'No markers at all'
+    assert between_markers('No <hi>', '>', '<') == '', 'Wrong direction'
+    print('Wow, you are doing pretty good. Time to check it!')
