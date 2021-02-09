@@ -4,7 +4,8 @@ import re
 def is_acceptable_password(password: str) -> bool:
     if ((len(password) > 6 and len(re.findall("\d", password)) > 0 and \
         len(password) != len(re.findall("\d", password))) or len(password) > 9) and \
-        not any(wrd in password for wrd in ["password","PASSWORD"]):
+        not any(wrd in password for wrd in ["password","PASSWORD"]) and \
+        (len(list(dict.fromkeys(re.findall("(\w)", password)))) >= 3):
         return True
     return False
 
